@@ -21,7 +21,7 @@ include 'includes/sidebar.php';
                                         <th scope="col">#</th>
                                         <th scope="col">First</th>
                                         <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
+                                        <th scope="col">pushed from git</th>
                                     </tr>
                                 </thead>
                                 <tbody>
