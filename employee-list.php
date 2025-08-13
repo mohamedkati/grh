@@ -32,6 +32,13 @@ include 'includes/sidebar.php';
                                         <td>KATI</td>
                                         <td>@mdo</td>
                                     </tr>
+
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Mohammed</td>
+                                        <td>KATI</td>
+                                        <td>@mdo</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
