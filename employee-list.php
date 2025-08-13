@@ -25,25 +25,13 @@ include 'includes/sidebar.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Khawla</td>
-                                        <td>Fadili</td>
-                                        <td>@mdo</td>
-                                    </tr>
+
                                     <tr>
                                         <td>1</td>
                                         <td>Mohammed</td>
                                         <td>KATI</td>
                                         <td>@mdo</td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Ouissal</td>
-                                        <td>KATI</td>
-                                        <td>@fat</td>
-                                    </tr>
-
                                 </tbody>
                             </table>
                         </div>
