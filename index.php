@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Accueil"; // Définir le titre de la page
+$prefix = "";
 include 'includes/header.php';
 include 'includes/sidebar.php';
 ?>
