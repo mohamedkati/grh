@@ -112,12 +112,12 @@ include '../includes/sidebar.php';
                                     </span>
                                     Ajouter
                                 </button>
-                                <button type="button" class="btn btn-black" onclick="<?php $fullName = ""; ?>">
+                                <a href="listing.php" class="btn btn-black" style="color: white;">
                                     <span class="btn-label">
                                         <i class="fa fa-archive"></i>
                                     </span>
-                                    Vider
-                                </button>
+                                    Annuler
+                                </a>
                             </div>
                         </div>
                     </form>

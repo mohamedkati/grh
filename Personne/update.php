@@ -144,14 +144,14 @@ include '../includes/sidebar.php';
                                     <span class="btn-label">
                                         <i class="fa fa-plus"></i>
                                     </span>
-                                    Ajouter
+                                    Modifier
                                 </button>
-                                <button type="button" class="btn btn-black" onclick="<?php $fullName = ""; ?>">
+                                <a href="listing.php" class="btn btn-black" style="color: white;" onclick="<?php $fullName = ""; ?>">
                                     <span class="btn-label">
                                         <i class="fa fa-archive"></i>
                                     </span>
-                                    Vider
-                                </button>
+                                    Annuler
+                                </a>
                             </div>
                         </div>
                     </form>

@@ -4,22 +4,36 @@ $prefix = "../";
 include '../includes/header.php';
 include '../includes/sidebar.php';
 ?>
+
+
 <?php
 
 $cnx = new PDO("mysql:host=localhost;dbname=testdb", "root", "");
 
-$query = $cnx->prepare("SELECT * FROM personne");
-$query->execute();
+$fullname = $_GET['fullName'] ?? '';
+$ville = $_GET['ville'] ?? '';
+$email = $_GET['email'] ?? '';
+
+$query = $cnx->prepare("SELECT * FROM personne where fullName LIKE :fullName AND ville LIKE :ville AND email LIKE :email");
+$query->execute([
+    'fullName' => '%' . $fullname . '%',
+    'ville' => '%' . $ville . '%',
+    'email' => '%' . $email . '%'
+]);
+
 $personnes = $query->fetchAll(PDO::FETCH_ASSOC);
 
-
-
 ?>
+
+
 
 <div class="main-panel">
     <div class="container">
         <div class="page-inner">
             <div class="row">
+                <div class="col-12">
+
+                </div>
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -47,6 +61,33 @@ $personnes = $query->fetchAll(PDO::FETCH_ASSOC);
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <form method="get" action="">
+                                            <td></td>
+                                            <td>
+                                                <input type="text" class="form-control input-full" value="<?= $fullname ?>"
+                                                    name="fullName" id="fullName" placeholder="Full Name">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control input-full" value="<?= $ville ?>"
+                                                    name="ville" id="ville" placeholder="Ville">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control input-full" value="<?= $email ?>"
+                                                    name="email" id="email" placeholder="Email">
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <button type="submit" class="btn btn-icon btn-round btn-info">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                                <a href="listing.php" class="btn btn-icon btn-round btn-black">
+                                                    <i class="fa fa-times fa-small"></i>
+                                                </a>
+                                            </td>
+                                        </form>
+                                    </tr>
                                     <?php foreach ($personnes as $index => $p) : ?>
                                         <tr>
                                             <td><?php echo $p["Id"] ?></td>
