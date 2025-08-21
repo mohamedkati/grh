@@ -1,10 +1,10 @@
 <?php
-
+include '../includes/database.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_poste = $_POST['id_poste'] ?? '';
     if (!empty($id_poste)) {
-        $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
-        $query = $conn->prepare("DELETE FROM poste WHERE id_poste = :id_poste");
+        $conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
+        $query = $conn->prepare("DELETE FROM poste WHERE id = :id_poste");
         $query->execute(['id_poste' => $id_poste]);
         header("Location: listing.php", true, 301);
         exit();

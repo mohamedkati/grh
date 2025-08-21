@@ -1,17 +1,18 @@
 <?php
+include '../includes/database.php';
 $errors = "";
 $nom_departement = "";
 $id = $_GET['id'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (!empty($id)) {
-        $conn = new PDO("mysql:host=localhost;dbname=entreprise_grh;charset=utf8", "root", "");
+        $conn = new PDO("mysql:host=localhost;dbname=$database;charset=utf8", "root", "");
         $query = $conn->prepare("SELECT * FROM departement WHERE id = :id");
         $query->execute(['id' => $id]);
         $departement = $query->fetch(PDO::FETCH_ASSOC);
 
         if ($departement) {
-            $nom_departement = $departement['nom_departement'];
+            $nom_departement = $departement['nom'];
         } else {
             $errors = "<div class='alert alert-danger'>Département non trouvé.</div>";
         }
@@ -28,12 +29,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors .= "<div class='alert alert-danger'>Le nom du département est requis.</div>";
     }
 
-    $conn = new PDO("mysql:host=localhost;dbname=entreprise_grh;charset=utf8", "root", "");
+    $conn = new PDO("mysql:host=localhost;dbname=$database;charset=utf8", "root", "");
 
     if (empty($errors)) {
         try {
             // Vérifier si un autre département a déjà ce nom
-            $query = $conn->prepare("SELECT nom_departement FROM departement WHERE nom_departement = :nom AND id != :id");
+            $query = $conn->prepare("SELECT nom FROM departement WHERE nom = :nom AND id != :id");
             $query->execute(['nom' => $nom_departement, "id" => $id]);
             $exists = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (empty($errors)) {
         try {
-            $query = $conn->prepare("UPDATE departement SET nom_departement = :nom WHERE id = :id");
+            $query = $conn->prepare("UPDATE departement SET nom = :nom WHERE id = :id");
             $query->execute([
                 'nom' => $nom_departement,
                 "id" => $id

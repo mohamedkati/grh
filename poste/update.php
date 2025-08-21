@@ -1,20 +1,20 @@
 <?php
-
+include '../includes/database.php';
 $errors = "";
 $nom_poste = "";
 $id_poste = $_GET['id_poste'] ?? '';
-    $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
-    $query = $conn->prepare("SELECT id_departement,nom_departement FROM departement "); 
+    $conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
+    $query = $conn->prepare("SELECT id,nom FROM departement "); 
     $query->execute();
     $departements = $query->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (!empty($id_poste)) {
-        $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
-        $query = $conn->prepare("SELECT nom_poste,id_departement FROM poste WHERE id_poste = :id_poste");
+        $conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
+        $query = $conn->prepare("SELECT nom,id_departement FROM poste WHERE id = :id_poste");
         $query->execute(['id_poste' => $id_poste]);
         $postes = $query->fetch(PDO::FETCH_ASSOC);
         if (!empty($postes)) {
-            $nom_poste = $postes['nom_poste'];
+            $nom_poste = $postes['nom'];
             $id_departement =$postes['id_departement'];
         } else {
             $errors = "<div class='alert alert-danger'>poste non trouvée.</div>";
@@ -33,10 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($nom_poste) === true) {
         $errors = $errors . "<div class='alert alert-danger'>Le nom de poste est requis.</div>";
     }
-    $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
+    $conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
     if (empty($errors)) {
         try {
-            $query = $conn->prepare("SELECT nom_poste FROM poste WHERE nom_poste = :nom_poste AND id_poste != :id_poste");
+            $query = $conn->prepare("SELECT nom FROM poste WHERE nom = :nom_poste AND id != :id_poste");
             $query->execute(['nom_poste' => $nom_poste, "id_poste" => $id_poste]);
             $postes = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     if (empty($errors)) {
         try {
-            $query = $conn->prepare("UPDATE poste set nom_poste=:nom_poste, id_departement=:id_departement where id_poste = :id_poste");
+            $query = $conn->prepare("UPDATE poste set nom=:nom_poste, id_departement=:id_departement where id = :id_poste");
             $query->execute([
                 'nom_poste' => $nom_poste,
                 'id_departement' => $id_departement,
@@ -98,7 +98,7 @@ include '../includes/sidebar.php';
                                          <option  value="">
                                          </option>                             
                                           <?php foreach($departements as $index => $d): ?>
-                                             <option  <?= $d['id_departement']===$id_departement ?  'selected':''?> value=<?=$d['id_departement']?>> <?= $d['nom_departement']?> </option>
+                                             <option  <?= $d['id']===$id_departement ?  'selected':''?> value=<?=$d['id']?>> <?= $d['nom']?> </option>
                                             <?php endforeach ;?>                       
                                    </select>
                                </div>

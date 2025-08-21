@@ -1,4 +1,5 @@
 <?php
+include '../includes/database.php';
 $pageTitle = "Accueil"; // Définir le titre de la page
 $prefix = "../";
 include '../includes/header.php';
@@ -7,19 +8,14 @@ include '../includes/sidebar.php';
 
 
 <?php
-
-$cnx = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
-
+$cnx = new PDO("mysql:host=localhost;dbname=$database", "root", "");
 $nom_poste = $_GET['nom_poste'] ?? '';
-
-$query = $cnx->prepare("SELECT id_poste,nom_poste,nom_departement FROM poste p inner join departement d
-on p.id_departement=d.id_departement where nom_poste LIKE :nom_poste ");
+$query = $cnx->prepare("SELECT p.id,p.nom,d.nom as nom_departement FROM poste p inner join departement d
+on p.id_departement=d.id where p.nom LIKE :nom_poste ");
 $query->execute([
   'nom_poste' => '%' . $nom_poste . '%'
 ]);
 $postes = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
 ?>
 
 
@@ -75,15 +71,15 @@ $postes = $query->fetchAll(PDO::FETCH_ASSOC);
                       <tbody>
                         <?php foreach ($postes as $index => $po) : ?>
                                         <tr>
-                                            <td><?= $po["id_poste"] ?></td>
-                                            <td><?= $po['nom_poste'] ?></td>
+                                            <td><?= $po["id"] ?></td>
+                                            <td><?= $po['nom'] ?></td>
                                             <td><?= $po['nom_departement'] ?></td>
                                             
                                             <td>
-                                                <a href="update.php?id_poste=<?= $po['id_poste'] ?>" class="btn btn-icon btn-round btn-success">
+                                                <a href="update.php?id_poste=<?= $po['id'] ?>" class="btn btn-icon btn-round btn-success">
                                                     <i class="fa fa-pen fa-small"></i>
                                                 </a>
-                                                <a href="delete.php?id_poste=<?= $po['id_poste'] ?>" class="btn btn-icon btn-round btn-danger">
+                                                <a href="delete.php?id_poste=<?= $po['id'] ?>" class="btn btn-icon btn-round btn-danger">
                                                     <i class="fa fa-trash fa-small"></i>
                                                 </a>
                                             </td>

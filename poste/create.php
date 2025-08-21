@@ -1,5 +1,5 @@
 <?php
-
+include '../includes/database.php';
 $data = "";
 $nom_poste = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
@@ -14,9 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $data = $data . "<div class='alert alert-danger'>Le departement est requis.</div>";
     }
 
-     $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
+     $conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
        if (empty($data)) {
-        $query = $conn->prepare("SELECT * FROM poste WHERE nom_poste = :nom_poste");
+        $query = $conn->prepare("SELECT * FROM poste WHERE nom = :nom_poste");
         $query->execute(['nom_poste' => $nom_poste]);
         $postes = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     }
     if (empty($data)) {
 
-        $query = $conn->prepare("INSERT INTO poste (nom_poste,id_departement)
+        $query = $conn->prepare("INSERT INTO poste (nom,id_departement)
          VALUES (:nom_poste,:id_departement)");
         $query->execute([
             'nom_poste' => $nom_poste,
@@ -38,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     }
 }
 
-$conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
-    $query = $conn->prepare("SELECT id_departement,nom_departement FROM departement "); 
+$conn = new PDO("mysql:host=localhost;dbname=$database", "root", "");
+    $query = $conn->prepare("SELECT id,nom FROM departement "); 
     $query->execute();
     $departements = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -48,6 +48,7 @@ $conn = new PDO("mysql:host=localhost;dbname=gestion_rh", "root", "");
 <?php
 $pageTitle = "Accueil"; // Définir le titre de la page
 $prefix = "../";
+
 include '../includes/header.php';
 include '../includes/sidebar.php';
 ?>
@@ -74,7 +75,7 @@ include '../includes/sidebar.php';
                                    <select class="form-select" name="id_departement" value="<?= $id_departement?>" id="exampleFormControlSelect1">
                                              <option  value="">Sélectionner</option>                             
                                           <?php foreach($departements as $index => $d): ?>
-                                             <option  value=<?=$d['id_departement']?>> <?= $d['nom_departement']?> </option>
+                                             <option  value=<?=$d['id']?>> <?= $d['nom']?> </option>
                                             <?php endforeach ;?>                                             
                                    </select>
                                </div>

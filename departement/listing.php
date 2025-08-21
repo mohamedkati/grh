@@ -1,15 +1,16 @@
 
 <?php
+include '../includes/database.php';
 $pageTitle = "Départements"; 
 $prefix = "../";
 include '../includes/header.php';
 include '../includes/sidebar.php';
 
-$cnx = new PDO("mysql:host=localhost;dbname=entreprise_grh", "root", "");
+$cnx = new PDO("mysql:host=localhost;dbname=$database", "root", "");
 
 $nomDept = $_GET['nom_departement'] ?? '';
 
-$query = $cnx->prepare("SELECT * FROM departement WHERE nom_departement LIKE :nom");
+$query = $cnx->prepare("SELECT * FROM departement WHERE nom LIKE :nom");
 $query->execute([
     'nom' => '%' . $nomDept . '%'
 ]);
@@ -67,7 +68,7 @@ $departements = $query->fetchAll(PDO::FETCH_ASSOC);
                                     <?php foreach ($departements as $d) : ?>
                                         <tr>
                                             <td><?= $d["id"] ?></td>
-                                            <td><?= htmlspecialchars($d['nom_departement']) ?></td>
+                                            <td><?= htmlspecialchars($d['nom']) ?></td>
                                             <td>
                                                 <a href="update.php?id=<?= $d['id'] ?>" class="btn btn-icon btn-round btn-success">
                                                     <i class="fa fa-pen fa-small"></i>

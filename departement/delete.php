@@ -1,9 +1,9 @@
 <?php
-
+include '../includes/database.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST['id'] ?? '';
     if (!empty($id)) {
-        $conn = new PDO("mysql:host=localhost;dbname=entreprise_grh;charset=utf8", "root", "");
+        $conn = new PDO("mysql:host=localhost;dbname=$database;charset=utf8", "root", "");
         $query = $conn->prepare("DELETE FROM departement WHERE id = :id");
         $query->execute(['id' => $id]);
         header("Location: listing.php", true, 301);

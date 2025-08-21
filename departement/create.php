@@ -1,4 +1,5 @@
 <?php
+include '../includes/database.php';
 $data = "";
 $nom_departement = "";
 
@@ -11,11 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Connexion DB
-    $conn = new PDO("mysql:host=localhost;dbname=entreprise_grh;charset=utf8", "root", "");
+    $conn = new PDO("mysql:host=localhost;dbname=$database;charset=utf8", "root", "");
 
     // Vérifier si le département existe déjà
     if (empty($data)) {
-        $query = $conn->prepare("SELECT nom_departement FROM departement WHERE nom_departement = :nom_departement");
+        $query = $conn->prepare("SELECT nom FROM departement WHERE nom = :nom_departement");
         $query->execute([':nom_departement' => $nom_departement]);
         $exists = $query->fetch();
 
@@ -26,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Si pas d'erreurs → insertion
     if (empty($data)) {
-        $query = $conn->prepare("INSERT INTO departement (nom_departement) VALUES (:nom_departement)");
+        $query = $conn->prepare("INSERT INTO departement (nom) VALUES (:nom_departement)");
         $query->execute([':nom_departement' => $nom_departement]);
 
         header("Location: ../departement/listing.php");
