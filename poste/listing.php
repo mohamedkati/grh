@@ -57,9 +57,9 @@ $postes = $query->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                           <form method="GET" action="">
                           <td>
-                            <input type="text" class="form-control input-full" value="<?= $nom_poste ?>" name="nom_poste" id="nom_poste" placeholder=" poste name">                   
+                                               
                           </td>
-                          <td></td>
+                          <td><input type="text" class="form-control input-full" value="<?= $nom_poste ?>" name="nom_poste" id="nom_poste" placeholder=" poste name"></td>
                           <td></td>
                           <td>
                               <button type="submit" class="btn btn-icon btn-round btn-info">
