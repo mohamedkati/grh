@@ -1,51 +1,129 @@
 <?php
-// connexion bdd
-$conn = new PDO("mysql:host=localhost;dbname=entreprise_grh;charset=utf8", "root", "");
+include '../includes/database.php';
 
-// traiter formulaire
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $employe_id = $_POST['employe_id'];
-    $date_debut = $_POST['date_debut'];
-    $date_fin = $_POST['date_fin'];
+$data = "";
+$id_employe = "";
+$date_debut = "";
+$date_fin = "";
 
-    $sql = "INSERT INTO conge (employe_id, date_debut, date_fin, statut) 
-            VALUES ('$employe_id', '$date_debut', '$date_fin', 'En attente')";
-    $conn->exec($sql);
+// Connexion à la DB
+try {
+    $conn = new PDO("mysql:host=localhost;dbname=$database;charset=utf8", "root", "");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
 
-    echo "✅ Demande de congé ajoutée avec succès !";
+// Récupérer la liste des employés
+try {
+    $employes = $conn->query("SELECT id, nom FROM employe")->fetchAll();
+} catch(PDOException $e) {
+    die("Erreur lors de la récupération des employés : " . $e->getMessage());
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id_employe = $_POST['id_employe'] ?? '';
+    $date_debut = $_POST['date_debut'] ?? '';
+    $date_fin = $_POST['date_fin'] ?? '';
+
+    // Vérification des champs
+    if (empty($id_employe) || empty($date_debut) || empty($date_fin)) {
+        $data = "<div class='alert alert-danger'>Tous les champs sont requis.</div>";
+    } elseif ($date_fin < $date_debut) {
+        $data = "<div class='alert alert-danger'>La date de fin doit être après la date de début.</div>";
+    }
+
+    if (empty($data)) {
+        try {
+            $stmt = $conn->prepare("INSERT INTO conge (id_employe, date_debut, date_fin, statut) 
+                                    VALUES (:id_employe, :date_debut, :date_fin, 'en cours')");
+            $stmt->execute([
+                ':id_employe' => $id_employe,
+                ':date_debut' => $date_debut,
+                ':date_fin'   => $date_fin
+            ]);
+            header("Location: listing.php");
+            exit();
+        } catch(PDOException $e) {
+            $data = "<div class='alert alert-danger'>Erreur lors de l'enregistrement : " . $e->getMessage() . "</div>";
+        }
+    }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Demander un congé</title>
-</head>
-<body>
-    <h2>Demander un congé</h2>
-    <form method="POST">
-        <label>Employé :</label>
-        <select name="employe_id" required>
-            <?php
-            $sql = "SELECT id, nom FROM employe";
-            $result = $conn->query($sql);
-            foreach ($result as $row) {
-                echo "<option value='".$row['id']."'>".$row['nom']."</option>";
-            }
-            ?>
-        </select>
-        <br><br>
+<?php
+$pageTitle = "Demande de Congé"; 
+$prefix = "../";
+include '../includes/header.php';
+include '../includes/sidebar.php';
+?>
 
-        <label>Date début :</label>
-        <input type="date" name="date_debut" required>
-        <br><br>
+<div class="main-panel">
+    <div class="container">
+        <div class="page-inner">
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="" method="post">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Demander un Congé</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group form-inline">
+                                    <label for="id_employe" class="col-md-3 col-form-label">Employé</label>
+                                    <select name="id_employe" id="id_employe" class="form-control input-full" required>
+                                        <option value="">-- Choisir Employé --</option>
+                                        <?php foreach($employes as $emp): ?>
+                                            <option value="<?= $emp['id']; ?>" <?= ($id_employe == $emp['id']) ? 'selected' : ''; ?>>
+                                                <?= htmlspecialchars($emp['nom']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
 
-        <label>Date fin :</label>
-        <input type="date" name="date_fin" required>
-        <br><br>
+                                <div class="form-group form-inline">
+                                    <label for="date_debut" class="col-md-3 col-form-label">Date début</label>
+                                    <input type="date" value="<?= htmlspecialchars($date_debut); ?>" class="form-control input-full" id="date_debut" name="date_debut" required>
+                                </div>
 
-        <button type="submit">Demander</button>
-    </form>
-</body>
-</html>
+                                <div class="form-group form-inline">
+                                    <label for="date_fin" class="col-md-3 col-form-label">Date fin</label>
+                                    <input type="date" value="<?= htmlspecialchars($date_fin); ?>" class="form-control input-full" id="date_fin" name="date_fin" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Actions</div>
+                            </div>
+                            <div class="card-body">
+                                <button type="submit" class="btn btn-secondary">
+                                    <span class="btn-label"><i class="fa fa-plus"></i></span>
+                                    Envoyer Demande
+                                </button>
+                                <a href="listing.php" class="btn btn-black" style="color: white;">
+                                    <span class="btn-label"><i class="fa fa-archive"></i></span>
+                                    Annuler
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Les erreurs</div>
+                        </div>
+                        <div class="card-body">
+                            <?php if (!empty($data)) echo $data; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php include '../includes/footer.php'; ?>

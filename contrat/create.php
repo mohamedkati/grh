@@ -16,9 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Vérifier si le contrat existe déjà
     if (empty($data)) {
-        $query = $conn->prepare("SELECT nom FROM contrat WHERE nom = :nom_contrat");
-        $query->execute([':nom_contrat' => $nom_contrat]);
-        $exists = $query->fetch();
+        $stmt = $conn->prepare("SELECT * FROM contrat WHERE nom = :nom");
+        $stmt->execute([':nom' => $nom_contrat]);
+        $exists = $stmt->fetch();
 
         if ($exists) {
             $data = "<div class='alert alert-danger'>Ce contrat existe déjà.</div>";
@@ -27,17 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Si pas d'erreurs → insertion
     if (empty($data)) {
-        $query = $conn->prepare("INSERT INTO contrat (nom) VALUES (:nom_contrat)");
-        $query->execute([':nom_contrat' => $nom_contrat]);
+        $stmt = $conn->prepare("INSERT INTO contrat (nom) VALUES (:nom)");
+        $stmt->execute([':nom' => $nom_contrat]);
 
-        header("Location: ../contrat/listing.php");
+        header("Location: listing.php");
         exit();
     }
 }
 ?>
 
 <?php
-$pageTitle = "Contrats"; 
+$pageTitle = "Créer Contrat"; 
 $prefix = "../";
 include '../includes/header.php';
 include '../includes/sidebar.php';
