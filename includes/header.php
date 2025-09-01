@@ -34,7 +34,11 @@
             },
         });
     </script>
-
+    <style>
+        .mb-7{
+            margin-bottom: 0.7rem !important;
+        }
+    </style>
     <!-- CSS Files -->
     <link rel="stylesheet" href="<?= $prefix  ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?= $prefix  ?>assets/css/plugins.min.css" />

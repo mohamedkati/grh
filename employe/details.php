@@ -33,28 +33,28 @@ include '../includes/sidebar.php';
                     <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                         <div class="card-header cursor-pointer">
                             <div class="card-title m-0">
-                                <h3 class="fw-bolder m-0">Profile Details</h3>
+                                <h3 class="fw-bolder m-0"> Details de l'employé</h3>
                             </div>
                         </div>
 
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title"></h4>
-                            </div>
                             <div class="card-body">
                                 <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
                                     <li class="nav-item submenu" role="presentation">
-                                        <a class="nav-link" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false" tabindex="-1">les infos d'employé</a>
+                                        <a class="nav-link active" id="pills-info-tab" data-bs-toggle="pill" href="#pills-info" 
+                                        role="tab" aria-controls="pills-info" aria-selected="false" tabindex="-1">Infos.</a>
                                     </li>
                                     <li class="nav-item submenu" role="presentation">
-                                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" tabindex="-1">Absence</a>
+                                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile"
+                                         role="tab" aria-controls="pills-profile" aria-selected="false" tabindex="-1">absences</a>
                                     </li>
                                     <li class="nav-item submenu" role="presentation">
-                                        <a class="nav-link active" id="pills-congé-tab" data-bs-toggle="pill" href="#pills-congé" role="tab" aria-controls="pills-congé" aria-selected="true">Congé</a>
+                                        <a class="nav-link" id="pills-congé-tab" data-bs-toggle="pill" href="#pills-congé" 
+                                        role="tab" aria-controls="pills-congé" aria-selected="true">Congés</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content mt-2 mb-3" id="pills-tabContent">
-                                    <div class="tab-pane fade" id="pills-employe" role="tabpanel" aria-labelledby="pills-employe-tab">
+                                <div class="tab-content" id="">
+                                    <div class="tab-pane  active show mt-2 mb-3" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
                                         <div class="row mb-7">
                                             <label class="col-lg-4 fw-bold text-muted">Nom</label>
                                             <div class="col-lg-8">
@@ -72,7 +72,7 @@ include '../includes/sidebar.php';
                                         <div class="row mb-7">
                                             <label class="col-lg-4 fw-bold text-muted">la Date Naissance</label>
                                             <div class="col-lg-8 fv-row">
-                                                <span class="fw-bold text-gray-800 fs-6"><?= $employes["date_naissance"] ?? '' ?></span>
+                                                <span class="text-gray-500 fs-6"><?= $employes["date_naissance"] ?? '' ?></span>
                                             </div>
                                         </div>
 
@@ -147,112 +147,54 @@ include '../includes/sidebar.php';
                                         </div>
                                     </div>
 
-
                                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-
+                                        <table class="table  table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">la date d'absence</th>
+                                                    <th scope="col">le nombre des jours</th>
+                                                    <th scope="col">le motif d'absence</th>
+                                                </tr>
+                                            </thead>
+                                            <?php foreach ($absences as $index => $a): ?>
+                                                <tr>
+                                                    <td><?= $a["date_absence"] ?? '' ?></td>
+                                                    <td><?= $a["nombre_jour"] ?? '' ?></td>
+                                                    <td><?= $a["motif"] ?? '' ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </table>
                                     </div>
-                                    <div class="tab-pane fade active show" id="pills-congé" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                        <?php foreach ($conges as $index => $c): ?>
-                                            <div class="row mb-7">
-                                                <label class="col-lg-4 fw-bold text-muted">la date debut du congé</label>
-                                                <div class="col-lg-8 fv-row">
-                                                    <span class="fw-bold text-gray-800 fs-6"><?= $c["date_debut"] ?? '' ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-7">
-                                                <label class="col-lg-4 fw-bold text-muted">la date fin du congé</label>
-                                                <div class="col-lg-8 fv-row">
-                                                    <span class="fw-bold text-gray-800 fs-6"><?= $c["date_fin"] ?? '' ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-7">
-                                                <label class="col-lg-4 fw-bold text-muted">le statut de congé</label>
-                                                <div class="col-lg-8 fv-row">
-                                                    <span class="fw-bold text-gray-800 fs-6"><?= $c["statut"] ?? '' ?></span>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
+
+
+                                    <div class="tab-pane fade show" id="pills-congé" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                        <table class="table  table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">la date début du congé</th>
+                                                    <th scope="col">la date fin du congé</th>
+                                                    <th scope="col">le statut de congé</th>
+                                                </tr>
+                                            </thead>
+                                            <?php foreach ($conges as $index => $c): ?>
+                                                <tr>
+                                                    <td><?= $c["date_debut"] ?? '' ?></td>
+                                                    <td><?= $c["date_fin"] ?? '' ?></td>
+                                                    <td><?= $c["statut"] ?? '' ?></td>
+                                                <?php endforeach; ?>
+                                        </table>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
-
-                        l-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["telephone"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">prènom</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["prenom"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">Adresse</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["adresse"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">Date début de Contrat</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["date_debut_contrat"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">Date fin de Contrat</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["date_fin_contrat"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">le type d'Employé</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["type_employe"] ?? '' ?></span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="col-lg-4 fw-bold text-muted">le pote</label>
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-bold text-gray-800 fs-6"><?= $employes["nom_poste"] ?? '' ?></span>
-                                </div>
-                            </div>
-          
-
-                            <?php foreach ($absences as $index => $a): ?>
-                                <div class="row mb-7">
-                                    <label class="col-lg-4 fw-bold text-muted">la date d'absence</label>
-                                    <div class="col-lg-8 fv-row">
-                                        <span class="fw-bold text-gray-800 fs-6"><?= $a["date_absence"] ?? '' ?></span>
-                                    </div>
-                                </div>
-                                <div class="row mb-7">
-                                    <label class="col-lg-4 fw-bold text-muted">le nombre des jours</label>
-                                    <div class="col-lg-8 fv-row">
-                                        <span class="fw-bold text-gray-800 fs-6"><?= $a["nombre_jour"] ?? '' ?></span>
-                                    </div>
-                                </div>
-                                <div class="row mb-7">
-                                    <label class="col-lg-4 fw-bold text-muted">le Motif d'absence</label>
-                                    <div class="col-lg-8 fv-row">
-                                        <span class="fw-bold text-gray-800 fs-6"><?= $a["motif"] ?? '' ?></span>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <!--end::Card body-->
                     </div>
-
                 </div>
+
             </div>
         </div>
     </div>
+</div>
 </div>
 
 
