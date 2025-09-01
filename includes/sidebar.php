@@ -23,7 +23,7 @@
 }
 .sidebar h2 {
     color: #ecf0f1;
-    text-align: left;   /* 👈 دابا غادي يجي فـ ليسر */
+    text-align: left;   
     margin: 0 0 20px 20px;
     font-size: 20px;
     border-bottom: 1px solid #7f8c8d;
